@@ -1,0 +1,35 @@
+name: Containerized Build
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+    
+
+jobs:
+
+  registry_push:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Auth to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_HUB_USERNAME }}
+        password: ${{ secrets.DOCKER_HUB_TOKEN }}
+
+    - name: Metadata
+      id: meta
+      uses: docker/metadata-action@v5
+      with:
+        images: sondelll/watercooler
+
+    - name: Build and push
+      uses: docker/build-push-action@v5
+      with:
+        platforms: linux/amd64
+        push: true
+        tags: sondelll/watercooler:latest

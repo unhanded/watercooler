@@ -5,17 +5,21 @@ import (
 	"time"
 )
 
+func testMessage() Message {
+	return Message{
+		Author:      "Tester.testington",
+		Title:       "Test Message",
+		Content:     "This is a test message",
+		Topic:       []string{"test", "unit"},
+		LifetimeSec: 3,
+		Timestamp:   time.Now().Unix(),
+	}
+}
+
 func TestInMemoryStoreInsert(t *testing.T) {
 	store := NewInMemoryMessageStore()
 
-	m := Message{
-		Author:     "Tester.testington",
-		Title:      "Test Message",
-		Content:    "This is a test message",
-		Topic:      []string{"test", "unit"},
-		ExpiryUnix: time.Now().Add(time.Second * 4).Unix(),
-	}
-
+	m := testMessage()
 	store.Insert(m)
 
 	if len(store.Messages) != 1 {
@@ -32,14 +36,7 @@ func TestInMemoryStoreInsert(t *testing.T) {
 func TestInMemoryStoreList(t *testing.T) {
 	store := NewInMemoryMessageStore()
 
-	m := Message{
-		Author:     "Tester.testington",
-		Title:      "Test Message",
-		Content:    "This is a test message",
-		Topic:      []string{"test", "unit"},
-		ExpiryUnix: time.Now().Add(time.Second * 4).Unix(),
-	}
-
+	m := testMessage()
 	store.Insert(m)
 
 	all, err := store.List()
@@ -55,14 +52,7 @@ func TestInMemoryStoreList(t *testing.T) {
 func TestInMemoryStorePrune(t *testing.T) {
 	store := NewInMemoryMessageStore()
 
-	m := Message{
-		Author:     "Tester.testington",
-		Title:      "Test Message",
-		Content:    "This is a test message",
-		Topic:      []string{"test", "unit"},
-		ExpiryUnix: time.Now().Add(time.Second * 4).Unix(),
-	}
-
+	m := testMessage()
 	store.Insert(m)
 
 	time.Sleep(time.Second * 5)

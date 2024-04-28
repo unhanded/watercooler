@@ -8,7 +8,7 @@ RUN go mod download
 
 RUN go build ./app/watercooler-serve
 
-FROM alpine:3.19
+FROM alpine:3.19 AS RUNNER
 
 WORKDIR /app
 
@@ -16,5 +16,4 @@ COPY --from=builder /app/watercooler-serve .
 
 CMD ["./watercoolr-serve"]
 
-EXPOSE 8880
-
+EXPOSE 8000

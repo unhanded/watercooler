@@ -156,7 +156,7 @@ func (s *ValkeyMessageStore) Retract(id uuid.UUID) error {
 	return err
 }
 
-func NewValkeyMessageStore() MessageStore {
+func NewMessageStore() MessageStore {
 	store := ValkeyMessageStore{}
 
 	client := redis.NewClient(&redis.Options{

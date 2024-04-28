@@ -26,7 +26,7 @@ func main() {
 		}
 	}
 
-	store := msg.NewValkeyMessageStore()
+	store := msg.NewMessageStore()
 
 	http.HandleFunc("/insert", func(w http.ResponseWriter, r *http.Request) {
 		msg := msg.Message{}

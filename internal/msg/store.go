@@ -158,27 +158,35 @@ func (s *ValkeyMessageStore) Retract(id uuid.UUID) error {
 
 func NewMessageStore() MessageStore {
 	store := ValkeyMessageStore{}
+	addr, err := redisEnv()
+
+	if err != nil {
+		fmt.Println("Failed to get Redis address, falling back to in-memory store")
+		return NewInMemoryMessageStore()
+	}
 
 	client := redis.NewClient(&redis.Options{
-		Addr: redisEnv(),
+		Addr: addr,
 	})
 
 	store.Conn = client.Conn()
+
 	if store.Conn == nil {
 		fmt.Println("Failed to connect to Redis, falling back to in-memory store")
 		return NewInMemoryMessageStore()
 	}
+
 	return &store
 }
 
-func redisEnv() string {
+func redisEnv() (string, error) {
 	redisHost := os.Getenv("REDIS_HOST")
 	redisPort := os.Getenv("REDIS_PORT")
 	if redisHost == "" {
-		redisHost = "localhost"
+		return "", fmt.Errorf("REDIS_HOST is not set")
 	}
 	if redisPort == "" {
 		redisPort = "6379"
 	}
-	return fmt.Sprintf("%s:%s", redisHost, redisPort)
+	return fmt.Sprintf("%s:%s", redisHost, redisPort), nil
 }

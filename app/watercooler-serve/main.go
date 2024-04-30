@@ -63,6 +63,6 @@ func main() {
 		w.Write([]byte("OK"))
 	})
 
-	addr := fmt.Sprintf(":%d", port)
+	addr := fmt.Sprintf("0.0.0.0:%d", port)
 	http.ListenAndServe(addr, nil)
 }
